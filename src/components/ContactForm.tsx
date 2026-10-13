@@ -53,8 +53,21 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-sand-200 sm:p-7"
+      className="p-2 sm:p-4"
     >
+      <div className="mb-8 flex items-center justify-between gap-4">
+        <h2 className="font-display text-3xl text-on-surface">
+          Bize Mesaj Gönderin
+        </h2>
+        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-secondary-fixed px-3 py-1 text-xs font-semibold text-on-secondary-fixed-variant">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+          En geç 15 dk yanıt
+        </span>
+      </div>
+      <p className="-mt-6 mb-6 text-sm text-on-surface-variant">
+        Aklındaki Kapadokya seyahatini kısaca özetle; güncel balon durumları,
+        vadi şartları ve uygun kontenjanlarla en uygun planı çıkaralım.
+      </p>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label
@@ -138,7 +151,7 @@ export default function ContactForm() {
 
       <button
         type="submit"
-        className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-clay-600 px-6 py-4 text-base font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-clay-700"
+        className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-4 text-base font-bold text-on-primary shadow-md transition-all hover:bg-primary-container"
       >
         <Send className="h-4.5 w-4.5" />
         Gönder (WhatsApp ile)

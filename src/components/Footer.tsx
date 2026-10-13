@@ -1,123 +1,133 @@
 import Link from "next/link";
-import { Balloon, MapPin, Phone, Mail, Clock } from "lucide-react";
-import { navLinks, site, currentYear } from "@/data/site";
+import {
+  Balloon,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Verified,
+} from "lucide-react";
+import { navLinks, site } from "@/data/site";
 import { tours } from "@/data/tours";
-import { posts } from "@/data/blog";
 
 export default function Footer() {
-  const year = currentYear;
   return (
-    <footer className="bg-night-950 text-sand-200">
-      <div className="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
-          <div className="flex items-center gap-2.5 font-display text-xl font-semibold text-white">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ember-500 text-white">
-              <Balloon className="h-5 w-5" strokeWidth={2.2} />
-            </span>
-            Kapadokya<span className="-ml-1.5 text-ember-400">Aktivite</span>
+    <footer className="w-full bg-surface-container-low pt-16 text-on-surface">
+      <div className="container-page">
+        <div className="grid gap-10 pb-12 md:grid-cols-2 lg:grid-cols-5">
+          {/* Marka */}
+          <div className="flex flex-col gap-4 lg:col-span-2">
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-on-primary">
+                <Balloon className="h-5 w-5" strokeWidth={2.2} />
+              </span>
+              <span className="font-display text-xl font-semibold">
+                Kapadokya Aktivite
+              </span>
+            </div>
+            <p className="max-w-sm text-sm leading-relaxed text-on-surface-variant">
+              Kapadokya&apos;nın bin yıllık tüf vadilerinde, yapay
+              koşturmacadan uzak, yerel rehberler ve zanaatkârlarla
+              kurgulanmış dingin, saygılı ve sahici yolculuklar.
+            </p>
+            <div className="flex flex-col gap-1 pt-2">
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-tertiary">
+                <Verified className="h-4 w-4" /> TÜRSAB üyesi kayıtlı turizm
+                işletmesi
+              </span>
+              <span className="text-xs text-outline">
+                Tüm turlar zorunlu seyahat sigortası kapsamındadır.
+              </span>
+            </div>
           </div>
-          <p className="mt-4 text-sm leading-relaxed text-sand-300">
-            {site.founded}&apos;den beri Kapadokya&apos;da yerli misafirlerimize
-            sürpriz maliyetsiz, güvenceli aktivite turları düzenliyoruz. Yerel
-            rehber, yerel fiyat, yerel samimiyet.
-          </p>
-        </div>
 
-        <div>
-          <h3 className="font-display text-base font-semibold text-white">
-            Popüler Turlar
-          </h3>
-          <ul className="mt-4 space-y-2.5 text-sm">
-            {tours.map((t) => (
-              <li key={t.slug}>
+          {/* Popüler deneyimler */}
+          <div className="flex flex-col gap-3">
+            <span className="text-sm font-bold uppercase tracking-wider text-on-surface">
+              Popüler Deneyimler
+            </span>
+            <nav className="flex flex-col gap-2.5 text-sm text-on-surface-variant">
+              {tours.map((t) => (
                 <Link
+                  key={t.slug}
                   href={`/aktiviteler/${t.slug}`}
-                  className="text-sand-300 transition-colors hover:text-ember-300"
+                  className="transition-colors hover:text-primary"
                 >
                   {t.shortTitle}
                 </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+              ))}
+            </nav>
+          </div>
 
-        <div>
-          <h3 className="font-display text-base font-semibold text-white">
-            Keşfet
-          </h3>
-          <ul className="mt-4 space-y-2.5 text-sm">
-            {navLinks
-              .filter((l) => l.href !== "/")
-              .map((l) => (
-                <li key={l.href}>
+          {/* Sayfalar */}
+          <div className="flex flex-col gap-3">
+            <span className="text-sm font-bold uppercase tracking-wider text-on-surface">
+              Keşfet
+            </span>
+            <nav className="flex flex-col gap-2.5 text-sm text-on-surface-variant">
+              {navLinks
+                .filter((l) => l.href !== "/")
+                .map((l) => (
                   <Link
+                    key={l.href}
                     href={l.href}
-                    className="text-sand-300 transition-colors hover:text-ember-300"
+                    className="transition-colors hover:text-primary"
                   >
                     {l.label}
                   </Link>
-                </li>
-              ))}
-            {posts.slice(0, 3).map((p) => (
-              <li key={p.slug}>
-                <Link
-                  href={`/kapadokya-rehberi/${p.slug}`}
-                  className="text-sand-300 transition-colors hover:text-ember-300"
-                >
-                  {p.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+                ))}
+            </nav>
+          </div>
 
-        <div>
-          <h3 className="font-display text-base font-semibold text-white">
-            İletişim
-          </h3>
-          <ul className="mt-4 space-y-3 text-sm text-sand-300">
-            <li className="flex items-start gap-2.5">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-ember-400" />
-              <span>
-                {site.address.street}, {site.address.district}/
-                {site.address.city}
-              </span>
-            </li>
-            <li className="flex items-center gap-2.5">
-              <Phone className="h-4 w-4 shrink-0 text-ember-400" />
-              <a href={site.phoneHref} className="hover:text-ember-300">
-                {site.phoneDisplay}
-              </a>
-            </li>
-            <li className="flex items-center gap-2.5">
-              <Mail className="h-4 w-4 shrink-0 text-ember-400" />
-              <a href={`mailto:${site.email}`} className="hover:text-ember-300">
-                {site.email}
-              </a>
-            </li>
-            <li className="flex items-start gap-2.5">
-              <Clock className="mt-0.5 h-4 w-4 shrink-0 text-ember-400" />
-              <span>
-                {site.hours[0].days}: {site.hours[0].time}
-                <br />
-                {site.hours[1].days}: {site.hours[1].time}
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="border-t border-white/10">
-        <div className="container-page flex flex-col items-center justify-between gap-3 py-5 text-xs text-sand-300 sm:flex-row">
-          <p>
-            © {year} {site.legalName}. Tüm hakları saklıdır.
-          </p>
-          <p>
-            TÜRSAB üyesi acente · Görseller Wikimedia Commons CC lisanslarıyla{" "}
-            <Link href="/gorsel-kunyeleri" className="underline hover:text-ember-300">
-              künyeleri
+          {/* İletişim */}
+          <div className="flex flex-col gap-4">
+            <span className="text-sm font-bold uppercase tracking-wider text-on-surface">
+              Doğrudan İletişim
+            </span>
+            <a
+              href={site.phoneHref}
+              className="flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-primary"
+            >
+              <Phone className="h-5 w-5 text-primary" /> {site.phoneDisplay}
+            </a>
+            <a
+              href={`mailto:${site.email}`}
+              className="flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-primary"
+            >
+              <Mail className="h-5 w-5 text-primary" /> {site.email}
+            </a>
+            <span className="flex items-start gap-2 text-sm text-on-surface-variant">
+              <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-tertiary" />
+              {site.address.street}, {site.address.district}/
+              {site.address.city}
+            </span>
+            <Link
+              href="/iletisim"
+              className="flex items-center gap-2 text-sm font-semibold text-tertiary transition-colors hover:text-primary"
+            >
+              <MessageCircle className="h-5 w-5" /> WhatsApp Hızlı Destek
             </Link>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-outline-variant/40 pb-10 pt-8 text-sm text-outline sm:flex-row">
+          <p>
+            © {site.founded}–2026 {site.legalName}. Tüm hakları saklıdır.
           </p>
+          <div className="flex items-center gap-6">
+            <Link
+              href="/gorsel-kunyeleri"
+              className="transition-colors hover:text-on-surface"
+            >
+              Görsel Künyeleri
+            </Link>
+            <Link
+              href="/iletisim"
+              className="transition-colors hover:text-on-surface"
+            >
+              İletişim
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

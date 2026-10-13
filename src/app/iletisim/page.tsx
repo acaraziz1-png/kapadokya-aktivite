@@ -1,5 +1,16 @@
 import type { Metadata } from "next";
-import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import Image from "next/image";
+import {
+  Bolt,
+  Clock,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  PhoneCall,
+  Store,
+  Verified,
+} from "lucide-react";
 import { site } from "@/data/site";
 import ContactForm from "@/components/ContactForm";
 import JsonLd from "@/components/JsonLd";
@@ -26,142 +37,267 @@ export default function ContactPage() {
     mainEntity: { "@id": `${site.domain}/#agency` },
   };
 
+  const contactCards = [
+    {
+      icon: Store,
+      iconHover: "group-hover:bg-primary group-hover:text-on-primary",
+      kicker: "Göreme Merkez",
+      title: "Bölge Ofisi",
+      body: `${site.address.street}, ${site.address.district} / ${site.address.city}`,
+      footer: (
+        <span className="flex items-center gap-1 text-xs font-semibold text-tertiary">
+          <span className="h-2 w-2 rounded-full bg-tertiary" /> Açık ·{" "}
+          {site.hours[0].time}
+        </span>
+      ),
+      href: site.mapsUrl,
+      external: true,
+    },
+    {
+      icon: PhoneCall,
+      iconHover: "group-hover:bg-secondary group-hover:text-on-secondary",
+      kicker: "Haftanın 7 Günü",
+      title: "Çağrı Merkezi",
+      body: site.phoneDisplay,
+      bodyClass: "font-display text-2xl text-primary",
+      footer: (
+        <span className="text-xs text-tertiary">Ücretsiz Çağrı</span>
+      ),
+      href: site.phoneHref,
+      external: false,
+    },
+    {
+      icon: MessageCircle,
+      iconHover: "group-hover:bg-tertiary group-hover:text-on-tertiary",
+      kicker: "Anlık Bildirim",
+      title: "WhatsApp Hattı",
+      body: site.phoneDisplay,
+      bodyClass: "text-lg font-bold text-on-surface",
+      footer: (
+        <span className="flex items-center gap-1 text-xs font-semibold text-primary">
+          Ort. 10 dk dönüş <Bolt className="h-4 w-4 text-tertiary" />
+        </span>
+      ),
+      href: waLink("Merhaba! Kapadokya turları hakkında bilgi almak istiyorum."),
+      external: true,
+    },
+    {
+      icon: Mail,
+      iconHover: "group-hover:bg-primary-container group-hover:text-on-primary-container",
+      kicker: "Yazılı Talep",
+      title: "E-posta İletişim",
+      body: site.email,
+      bodyClass: "text-sm font-semibold text-primary",
+      footer: <span className="text-xs text-outline">Grup & Acente Masası</span>,
+      href: `mailto:${site.email}`,
+      external: false,
+    },
+  ];
+
   return (
     <>
       <JsonLd data={contactSchema} />
 
-      <section className="relative overflow-hidden bg-night-950 pb-14 pt-28 lg:pb-20 lg:pt-36">
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: "url(/images/goreme-teras-pano.jpg)",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-night-950/70 to-night-950/85" />
-        <div className="container-page relative z-10 max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-ember-300">
-            İletişim
-          </p>
-          <h1 className="mt-2 font-display text-4xl font-semibold leading-tight text-white sm:text-5xl">
-            Yaz, arayız; kapılarımız açık
-          </h1>
-          <div className="divider-ember mt-5" />
-          <p className="mt-5 max-w-2xl text-lg text-sand-100/85">
-            En hızlısı WhatsApp. Ofis saatlerinde ortalama dönüş süremiz 10
-            dakika.
-          </p>
+      {/* Üst bant */}
+      <section className="relative w-full overflow-hidden bg-surface-container-low px-6 pb-14 pt-32 lg:px-12 lg:pt-40">
+        <div className="pointer-events-none absolute -right-20 -top-20 h-96 w-96 rounded-full bg-secondary-fixed/40 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 left-10 h-72 w-72 rounded-full bg-tertiary-fixed/30 blur-2xl" />
+        <div className="container-page relative z-10">
+          <div className="flex flex-col justify-between gap-8 pb-10 lg:flex-row lg:items-end">
+            <div className="max-w-3xl">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-surface-container px-3 py-1.5 text-tertiary">
+                <MapPin className="h-4 w-4" />
+                <span className="text-xs font-semibold uppercase tracking-wider">
+                  {site.address.district} Karargâhı · Doğrudan İletişim
+                </span>
+              </div>
+              <h1 className="mb-4 font-display text-4xl tracking-tight text-on-surface sm:text-5xl">
+                Bizimle İletişime Geçin
+              </h1>
+              <p className="max-w-2xl text-lg leading-relaxed text-on-surface-variant">
+                Kapadokya planını birlikte yapalım; tüf vadilerinde doğup
+                büyüyen yerel ekibimiz bir telefon uzağında.
+              </p>
+            </div>
+            <div className="flex flex-col items-start gap-4 self-start rounded-xl bg-surface p-4 shadow-sm sm:flex-row sm:items-center lg:self-auto">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary-fixed">
+                <Verified className="h-7 w-7 text-primary" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-on-surface">
+                    Kayıtlı & Sigortalı İşletme
+                  </span>
+                </div>
+                <p className="text-sm text-outline">
+                  T.C. Kültür ve Turizm Bakanlığı denetiminde
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Hızlı iletişim kartları */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {contactCards.map((c) => (
+              <a
+                key={c.title}
+                href={c.href}
+                {...(c.external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+                className="group flex flex-col justify-between rounded-xl bg-surface p-6 shadow-sm transition-shadow hover:shadow-md"
+              >
+                <div>
+                  <div
+                    className={`mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-surface-container text-primary transition-colors ${c.iconHover}`}
+                  >
+                    <c.icon className="h-[22px] w-[22px]" />
+                  </div>
+                  <span className="mb-1 block text-xs uppercase tracking-widest text-outline">
+                    {c.kicker}
+                  </span>
+                  <h3 className="mb-2 font-display text-xl text-on-surface">
+                    {c.title}
+                  </h3>
+                  <p className={`leading-relaxed text-on-surface-variant ${c.bodyClass ?? "text-sm"}`}>
+                    {c.body}
+                  </p>
+                </div>
+                <div className="-mx-6 -mb-6 mt-4 flex items-center justify-between rounded-b-xl bg-surface-container-low px-6 py-3 pt-4">
+                  {c.footer}
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="py-14 lg:py-20">
-        <div className="container-page grid gap-10 lg:grid-cols-[1fr_420px]">
-          {/* Bilgiler */}
-          <div>
-            <h2 className="font-display text-2xl font-semibold text-ink-900">
-              Doğrudan ulaş
-            </h2>
-            <div className="divider-ember mt-3" />
+      {/* İki sütun: form + ofis */}
+      <section className="w-full py-16">
+        <div className="container-page grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
+          {/* Form */}
+          <div className="rounded-2xl bg-surface-container-lowest p-8 shadow-sm ring-1 ring-outline-variant/30 lg:col-span-7 lg:p-10">
+            <ContactForm />
+          </div>
 
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <a
-                href={waLink("Merhaba! Kapadokya turları hakkında bilgi almak istiyorum.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group rounded-3xl bg-[#25D366]/10 p-6 ring-1 ring-[#25D366]/30 transition-all hover:-translate-y-0.5 hover:bg-[#25D366]/15"
-              >
-                <MessageCircle className="h-7 w-7 text-[#1da851]" />
-                <h3 className="mt-3 font-display text-lg font-semibold text-ink-900">
-                  WhatsApp
+          {/* Ofis ziyareti */}
+          <div className="flex flex-col gap-8 lg:col-span-5">
+            <div
+              id="konum"
+              className="relative flex flex-col gap-5 overflow-hidden rounded-2xl bg-surface-container-lowest p-7 shadow-sm ring-1 ring-outline-variant/30"
+            >
+              <div>
+                <div className="mb-2 inline-flex items-center gap-1.5 rounded bg-secondary-fixed px-2.5 py-1 text-xs font-semibold text-on-secondary-fixed-variant">
+                  <Clock className="h-4 w-4" /> Kapımız Her Zaman Açık
+                </div>
+                <h3 className="mb-2 font-display text-2xl text-on-surface">
+                  Çay Eşliğinde Rota Planlayalım
                 </h3>
-                <p className="mt-1 text-sm text-ink-500">
-                  En hızlı kanal · {site.phoneDisplay}
+                <p className="text-sm text-on-surface-variant">
+                  {site.address.district} merkezdeki ofisimize uğra; sıcak bir
+                  çay ikramımız eşliğinde vadileri harita üzerinden nokta nokta
+                  konuşalım.
                 </p>
-                <span className="mt-3 inline-block text-sm font-semibold text-[#1da851]">
-                  Mesaj Gönder →
-                </span>
-              </a>
-
-              <a
-                href={site.phoneHref}
-                className="rounded-3xl bg-clay-50 p-6 ring-1 ring-clay-200 transition-all hover:-translate-y-0.5 hover:bg-clay-100"
-              >
-                <Phone className="h-7 w-7 text-clay-600" />
-                <h3 className="mt-3 font-display text-lg font-semibold text-ink-900">
-                  Telefon
-                </h3>
-                <p className="mt-1 text-sm text-ink-500">{site.phoneDisplay}</p>
-                <span className="mt-3 inline-block text-sm font-semibold text-clay-700">
-                  Hemen Ara →
-                </span>
-              </a>
-
-              <a
-                href={`mailto:${site.email}`}
-                className="rounded-3xl bg-white p-6 ring-1 ring-sand-200 transition-all hover:-translate-y-0.5"
-              >
-                <Mail className="h-7 w-7 text-clay-600" />
-                <h3 className="mt-3 font-display text-lg font-semibold text-ink-900">
-                  E-posta
-                </h3>
-                <p className="mt-1 break-all text-sm text-ink-500">
-                  {site.email}
-                </p>
-                <span className="mt-3 inline-block text-sm font-semibold text-clay-700">
-                  Mail Gönder →
-                </span>
-              </a>
-
+              </div>
               <a
                 href={site.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-3xl bg-white p-6 ring-1 ring-sand-200 transition-all hover:-translate-y-0.5"
+                className="relative flex h-48 w-full items-end overflow-hidden rounded-xl shadow-inner"
               >
-                <MapPin className="h-7 w-7 text-clay-600" />
-                <h3 className="mt-3 font-display text-lg font-semibold text-ink-900">
-                  Ofis Adresi
-                </h3>
-                <p className="mt-1 text-sm text-ink-500">
-                  {site.address.street}, {site.address.district}/
-                  {site.address.city}
-                </p>
-                <span className="mt-3 inline-block text-sm font-semibold text-clay-700">
-                  Haritada Aç →
+                <Image
+                  src="/images/goreme-giris.jpg"
+                  alt={`${site.address.district} ofis çevresi`}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  className="object-cover"
+                />
+                <span className="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-transparent to-transparent" />
+                <span className="relative z-10 flex w-full items-center justify-between p-4 text-on-primary">
+                  <span className="flex items-center gap-2">
+                    <MapPin className="h-6 w-6 text-secondary-fixed" />
+                    <span>
+                      <span className="block text-xs font-bold leading-none">
+                        Kapadokya Aktivite Ofisi
+                      </span>
+                      <span className="text-xs text-secondary-fixed">
+                        {site.address.street}
+                      </span>
+                    </span>
+                  </span>
+                  <span className="rounded-lg bg-surface px-3 py-1.5 text-xs text-on-surface shadow-sm transition-colors hover:bg-secondary-fixed">
+                    Yol Tarifi Al
+                  </span>
                 </span>
               </a>
+              <div className="flex items-start gap-3 rounded-xl bg-surface-container-low p-3.5">
+                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                <p className="text-sm text-on-surface-variant">
+                  {site.address.district} Otogarı&apos;na yürüme mesafesindeyiz.
+                  Araçla gelen misafirlerimiz için ofis önünde park imkânı
+                  mevcut.
+                </p>
+              </div>
             </div>
 
-            <div className="mt-6 rounded-3xl bg-night-950 p-6">
-              <h3 className="flex items-center gap-2 font-display text-lg font-semibold text-white">
-                <Clock className="h-5 w-5 text-ember-300" />
-                Çalışma Saatleri
+            {/* Çalışma saatleri */}
+            <div className="rounded-2xl bg-surface-container-low p-7 shadow-sm ring-1 ring-outline-variant/30">
+              <h3 className="flex items-center gap-2 font-display text-xl text-on-surface">
+                <Clock className="h-5 w-5 text-primary" /> Çalışma Saatleri
               </h3>
-              <ul className="mt-4 space-y-2 text-sm text-sand-300">
+              <ul className="mt-4 space-y-2 text-sm text-on-surface-variant">
                 {site.hours.map((h) => (
                   <li key={h.days} className="flex justify-between gap-4">
                     <span>{h.days}</span>
-                    <span className="font-semibold text-white">{h.time}</span>
+                    <span className="font-semibold text-on-surface">
+                      {h.time}
+                    </span>
                   </li>
                 ))}
               </ul>
-              <p className="mt-4 text-xs text-sand-300/80">
+              <p className="mt-4 text-xs text-outline">
                 Sezon yoğunluğunda WhatsApp mesajlarına gece geç saatlere kadar
                 dönüş yapıyoruz.
               </p>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Form */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
-            <h2 className="font-display text-2xl font-semibold text-ink-900">
-              Formla yaz
-            </h2>
-            <div className="divider-ember mt-3" />
-            <div className="mt-6">
-              <ContactForm />
+      {/* Alt güven bandı */}
+      <section className="w-full bg-surface-container px-6 py-12 lg:px-12">
+        <div className="container-page flex flex-col items-center justify-between gap-8 md:flex-row">
+          <div className="flex items-center gap-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-surface-container-lowest text-primary shadow-sm">
+              <Phone className="h-7 w-7" />
             </div>
+            <div>
+              <h4 className="font-display text-xl text-on-surface">
+                Kapadokya&apos;da Yabancı Değilsin
+              </h4>
+              <p className="text-sm text-on-surface-variant">
+                Nevşehir ve Göreme&apos;de 7/24 sahada olan rehber ve şoför
+                ekibimizle tatilin boyunca yanındayız.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <a
+              href={waLink("Merhaba! Bilgi almak istiyorum.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-surface-container-lowest px-5 py-2.5 text-sm font-semibold text-on-surface shadow-sm transition-colors hover:bg-surface-bright"
+            >
+              <MessageCircle className="h-5 w-5 text-tertiary" />
+              WhatsApp&apos;tan Yazın
+            </a>
+            <a
+              href={site.phoneHref}
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-sm transition-colors hover:bg-primary-container"
+            >
+              <Phone className="h-5 w-5" />
+              {site.phoneDisplay}&apos;yi Arayın
+            </a>
           </div>
         </div>
       </section>

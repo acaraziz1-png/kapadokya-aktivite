@@ -9,7 +9,7 @@ export default function TourCard({ tour }: { tour: Tour }) {
   return (
     <Link
       href={`/aktiviteler/${tour.slug}`}
-      className="card-zoom group flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-sand-200 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-clay-200/40"
+      className="card-zoom group flex h-full flex-col overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm ring-1 ring-outline-variant/20 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
